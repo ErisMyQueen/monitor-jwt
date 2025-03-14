@@ -27,8 +27,6 @@ public class MailQueueListener {
         String type=(String)data.get("type");
         SimpleMailMessage message=switch (type)
         {
-            case "register" ->
-                    createMessage("欢迎注册","你的邮箱注册验证码为:"+code+",有效时间为三分钟",email);
             case "reset"->
                 createMessage("密码重置","你的邮箱密码重置验证码为:"+code+",有效时间为三分钟",email);
             default -> null;

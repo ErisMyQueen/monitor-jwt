@@ -3,7 +3,6 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.entity.vo.request.ConfirmResetVO;
-import com.example.entity.vo.request.EmailRegisterVO;
 import com.example.entity.vo.request.EmailResetVO;
 import com.example.service.AccountService;
 import jakarta.annotation.Resource;
@@ -28,15 +27,9 @@ public class AuthorizeController {
 
     @GetMapping("ask-code")
     public RestBean<Void> askVerifyCode(@RequestParam @Email String email,
-                                        @RequestParam @Pattern(regexp = "reset|register") String type,
+                                        @RequestParam @Pattern(regexp = "reset") String type,
                                         HttpServletRequest request) {
         return this.messageHandle(()->service.registerEmailVerifyCode(type,email,request.getRemoteAddr()));
-    }
-
-    @PostMapping("/register")
-    public RestBean<Void> register(@RequestBody @Valid EmailRegisterVO vo)
-    {
-        return this.messageHandle(vo,service::registerEmailAccount);
     }
 
     @PostMapping("/reset-confirm")

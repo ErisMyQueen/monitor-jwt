@@ -1,10 +1,8 @@
 package com.example.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.entity.dto.Account;
 import com.example.entity.vo.request.ConfirmResetVO;
-import com.example.entity.vo.request.EmailRegisterVO;
 import com.example.entity.vo.request.EmailResetVO;
 import com.example.mapper.AccountMapper;
 import com.example.service.AccountService;
@@ -16,13 +14,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Wrapper;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -88,25 +82,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
     }
 
     @Override
-    public String registerEmailAccount(EmailRegisterVO vo) {
-        String email = vo.getEmail();
-        String username = vo.getUsername();
-        String key=Const.VERIFY_EMAIL_DATA+email;
-        String code=stringRedisTemplate.opsForValue().get(key); //从redis中取出验证码
-        if(code==null) return "请先获取验证码"; //是否已经获取验证码
-        if(!code.equals(vo.getCode())) return "验证码输入错误,请重新输入"; // 验证码是否输入正确
-        if(this.existsAccountByEmail(email)) return "此电子邮件已经被注册,请重新输入";
-        if(this.existsAccountByUsername(username)) return "此用户名已经被注册,请重新输入";
-        String password = encoder.encode(vo.getPassword());
-        Account account=new Account(null,username,password,email,"user",new Date());
-        if(this.save(account)){
-            stringRedisTemplate.delete(key);
-            return null;
-        }
-        else return "发生了一些错误,请重试";
-    }
-
-    @Override
     public String resetConfirm(ConfirmResetVO vo) {
         String email = vo.getEmail();
         String code=stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_DATA+email);
@@ -129,13 +104,6 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account> impl
         return null;
     }
 
-    private boolean existsAccountByEmail(String email) {
-        return this.baseMapper.exists(Wrappers.<Account>query().eq("email",email));
-    }
-
-    private boolean existsAccountByUsername(String username){
-        return this.baseMapper.exists(Wrappers.<Account>query().eq("username",username));
-    }
     //限流
     private boolean verifyLimit(String ip)
     {
