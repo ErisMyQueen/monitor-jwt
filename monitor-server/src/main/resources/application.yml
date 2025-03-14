@@ -1,0 +1,28 @@
+spring:
+  security:
+    filter:
+      order: -100
+    jwt:
+      key: roxy
+      expire: 7
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jwt_project
+    username: root
+    password: 7758521
+  mail:
+    host: smtp.163.com
+    username: 17623504800@163.com
+    password: TFQqzzUtsNJXvxkF
+    port: 465
+    properties:
+      from: 17623504800@163.com
+      mail:
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+  rabbitmq:
+    addresses: localhost
+    username: guest
+    password: guest
+    virtual-host: /
