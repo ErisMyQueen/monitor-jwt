@@ -16,5 +16,6 @@ public class Const {
     public final static String ROLE_DEFAULT = "user";
     //请求自定义属性
     public final static String ATTR_USER_ID = "userId";
+    public final static String ATTR_CLIENT = "client";
 }
 

@@ -7,7 +7,7 @@ spring:
       expire: 7
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jwt_project
+    url: jdbc:mysql://localhost:3306/monitor
     username: root
     password: 7758521
   mail:
